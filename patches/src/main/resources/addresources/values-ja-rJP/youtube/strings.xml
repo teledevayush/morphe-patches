@@ -561,7 +561,7 @@ YouTube Doodle が表示されていると、カスタマイズしたヘッダ�
   <string name="morphe_hide_cast_button_title">キャストボタンを非表示</string>
   <string name="morphe_hide_collapse_button_title">最小化ボタンを非表示</string>
   <string name="morphe_hide_fullscreen_button_title">全画面表示ボタンを非表示</string>
-  <string name="morphe_hide_player_control_buttons_background_title">プレーヤー コントロールの背景を非表示</string>
+  <string name="morphe_hide_player_control_buttons_background_title">プレーヤーのコントロールの背景を非表示</string>
   <string name="morphe_hide_player_control_buttons_background_summary">動画プレーヤーのコントロール (再生ボタンなど) の周辺に表示される、ふちどりのための影を非表示にします</string>
   <string name="morphe_hide_player_previous_next_buttons_title">前の動画ボタンと次の動画ボタンを非表示</string>
   <string name="morphe_hide_settings_button_title">設定ボタンを非表示</string>
