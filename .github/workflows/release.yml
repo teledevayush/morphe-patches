@@ -45,6 +45,33 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # =========================================================================
+      # CUSTOM PROFILE TWEAKS: LANGUAGES, MANIFESTS, & GMS SELECTION RULES
+      # =========================================================================
+      - name: Apply Custom Light Profile Tweaks
+        run: |
+          echo "==== Step 1: Shredding non-English language localization strings ===="
+          find . -name "build.gradle.kts" -exec sed -i '/defaultConfig {/a \        resConfigs("en")' {} +
+          find . -name "build.gradle" -exec sed -i '/defaultConfig {/a \        resConfigs "en"' {} +
+
+          echo "==== Step 2: Injecting battery optimization wake-lock hooks ===="
+          find . -name "AndroidManifest.xml" -exec sed -i 's|</manifest>|<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/></manifest>|g' {} +
+
+          echo "==== Step 3: Modifying Gradle parameters to suppress warnings ===="
+          if [ -f "gradle.properties" ]; then
+            echo "options.suppressWarnings=true" >> gradle.properties
+            echo "options.allowExperimental=true" >> gradle.properties
+          fi
+
+          echo "==== Step 4: Rewriting target package name to com.rvx.android.youtube ===="
+          find . -type f \( -name "*.kt" -o -name "*.java" -o -name "*.json" \) -exec sed -i 's/app.morphe.youtube/com.rvx.android.youtube/g' {} +
+          find . -type f \( -name "*.kt" -o -name "*.java" -o -name "*.json" \) -exec sed -i 's/com.google.android.youtube.patched/com.rvx.android.youtube/g' {} +
+
+          echo "==== Step 5: Injecting Multi-GMS Package Compatibility Selection ===="
+          find . -type f -name "*GmsCore*.kt" -exec sed -i 's/"com.mgoogle.android.gms"/"app.revanced.android.gms", "com.mgoogle.android.gms"/g' {} +
+          find . -type f -name "*GmsCore*.kt" -exec sed -i 's/"app.morphe.gms"/"app.revanced.android.gms", "com.mgoogle.android.gms"/g' {} +
+          find . -type f -name "*.kt" -exec sed -i 's/listOf("com.mgoogle.android.gms")/listOf("app.revanced.android.gms", "com.mgoogle.android.gms")/g' {} +
+
       - name: Release
         uses: cycjimmy/semantic-release-action@v5
         id: release
